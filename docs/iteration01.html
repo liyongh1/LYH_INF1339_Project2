@@ -1,0 +1,90 @@
+<html>
+<head>
+    <title>Yonghao Li INF1339 Project 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        
+        body {
+          font-family: Arial;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        form.example input[type=text] {
+          padding: 10px;
+          font-size: 17px;
+          border: 1px solid grey;
+          float: left;
+          width: 80%;
+          background: #f1f1f1;
+        }
+
+        form.example button {
+          float: left;
+          width: 20%;
+          padding: 10px;
+          background: #2196F3;
+          color: white;
+          font-size: 17px;
+          border: 1px solid grey;
+          border-left: none;
+          cursor: pointer;
+        }
+
+        form.example button:hover {
+          background: #0b7dda;
+        }
+
+        form.example::after {
+          content: "";
+          clear: both;
+          display: table;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    <script>
+            function search_user_input() {
+            document.getElementById("sentinel").innerHTML = "HELLO!";
+            }
+        
+            var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_data=20190101&q=data+science&api-key=Hsik3luTB37M7GeFw4Qw8lHGZeGpvNIt";
+            var articleCount = 0
+
+            function setup() {   
+              noCanvas();   
+              loadJSON(url, gotData);
+            }
+        
+            function gotData(data) {
+                appendToPage (data)
+                for (var i = 1; i < 3; i++) {
+                    loadJSON(url + '&page=' + i, appendToPage)
+               }
+            }
+            
+            function appendToPage(data) {
+                var articles = data.response.docs;
+                for (var i = 0; i < articles.length; i++) {
+                    articleCount++
+                    h = document.createElement('h3')
+                    h.innerHTML = '(' + articleCount + ') ' + articles[i].headline.main
+                    document.body.appendChild(h);
+                    p = document.createElement('p')
+                    p.innerHTML = articles[i].snippet
+                    document.body.appendChild(p);  
+                  }
+            }
+        </script>
+
+    <body>
+        <h3>NYT API: Articles about Data Science in 2019</h3>
+        <form class="example" action="/action_page.php">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+
+    </body>
+</html>
